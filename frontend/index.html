@@ -1,0 +1,1036 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AquaSense | Smart Water Management</title>
+
+    <!-- Leaflet Map -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="logo">
+        <div class="logo-icon">💧</div>
+
+        <div>
+            <h1>AquaSense</h1>
+            <p>Smart Water Management</p>
+        </div>
+    </div>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#usage">Usage</a>
+        <a href="#leakage">Leakage</a>
+        <a href="#map">Water Map</a>
+        <a href="#solutions">Solutions</a>
+    </nav>
+
+    <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="te">తెలుగు</option>
+        <option value="hi">हिंदी</option>
+    </select>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="badge">🌊 SMART WATER ECOSYSTEM</span>
+
+        <h2 id="heroTitle">
+            Every Drop Matters.
+            <span>Every Drop Counts.</span>
+        </h2>
+
+        <p id="heroText">
+            AquaSense helps communities monitor water usage,
+            detect leakage, predict shortages and conserve water.
+        </p>
+
+        <div class="hero-buttons">
+
+            <button onclick="scrollToSection('dashboard')">
+                View Dashboard
+            </button>
+
+            <button class="secondary"
+                    onclick="scrollToSection('map')">
+                🗺️ Explore Water Map
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="water-animation">
+
+        <div class="water-circle">
+            💧
+        </div>
+
+        <div class="drop drop1">💧</div>
+        <div class="drop drop2">💧</div>
+        <div class="drop drop3">💧</div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="section">
+
+    <div class="section-heading">
+
+        <div>
+            <span class="small-title">LIVE MONITORING</span>
+
+            <h2>Water Dashboard</h2>
+
+            <p>
+                Monitor your area's water condition in real time.
+            </p>
+        </div>
+
+        <div class="update-box">
+
+            <span>Last Updated</span>
+
+            <strong id="lastUpdated">
+                Loading...
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <h3 style="margin-bottom: 20px;">
+    Selected Location:
+    <span id="selectedArea">Hyderabad</span>
+    </h3>
+    <div class="cards">
+
+        <!-- Water Usage -->
+
+        <div class="stat-card blue">
+
+            <div class="card-icon">
+                💧
+            </div>
+
+            <div>
+                <p>Today's Water Usage</p>
+
+                <h3>
+                    <span id="todayUsage">0</span>
+                    <small> Litres</small>
+                </h3>
+
+                <span class="trend positive">
+                    ↓ 8% from yesterday
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- Water Availability -->
+
+        <div class="stat-card green">
+
+            <div class="card-icon">
+                🌊
+            </div>
+
+            <div>
+                <p>Water Available</p>
+
+                <h3>
+                    <span id="waterAvailable">0</span>
+                    <small>%</small>
+                </h3>
+
+                <span class="trend positive">
+                    Good condition
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- Leakage -->
+
+        <div class="stat-card red">
+
+            <div class="card-icon">
+                🚨
+            </div>
+
+            <div>
+
+                <p>Leakage Alerts</p>
+
+                <h3 id="leakageCount">
+                    0
+                </h3>
+
+                <span class="trend danger">
+                    Requires attention
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Underground -->
+
+        <div class="stat-card purple">
+
+            <div class="card-icon">
+                🕳️
+            </div>
+
+            <div>
+
+                <p>Groundwater Level</p>
+
+                <h3>
+                    <span id="groundWater">
+                        0
+                    </span>
+                    <small> m</small>
+                </h3>
+
+                <span class="trend">
+                    Underground availability
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= USAGE ================= -->
+
+<section id="usage" class="section light">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="small-title">
+                WATER CONSUMPTION
+            </span>
+
+            <h2>Daily Water Usage</h2>
+
+            <p>
+                Understand how much water your area is consuming.
+            </p>
+
+        </div>
+
+        <select id="areaSelect">
+
+            <option value="Hyderabad">
+                Hyderabad
+            </option>
+
+            <option value="Siddipet">
+                Siddipet
+            </option>
+
+            <option value="Warangal">
+                Warangal
+            </option>
+
+            <option value="Nalgonda">
+                Nalgonda
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="usage-container">
+
+        <div class="chart-card">
+
+            <h3>
+                Daily Consumption
+            </h3>
+
+            <canvas id="usageChart"></canvas>
+
+        </div>
+
+
+        <div class="usage-info">
+
+            <div class="usage-item">
+
+                <span>🏠 Household</span>
+
+                <strong>
+                    42%
+                </strong>
+
+                <div class="progress">
+                    <div style="width:42%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="usage-item">
+
+                <span>🏢 Commercial</span>
+
+                <strong>
+                    27%
+                </strong>
+
+                <div class="progress">
+                    <div style="width:27%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="usage-item">
+
+                <span>🌱 Agriculture</span>
+
+                <strong>
+                    21%
+                </strong>
+
+                <div class="progress">
+                    <div style="width:21%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="usage-item">
+
+                <span>🏭 Industrial</span>
+
+                <strong>
+                    10%
+                </strong>
+
+                <div class="progress">
+                    <div style="width:10%"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= WEEKLY REPORT ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="small-title">
+                ANALYTICS
+            </span>
+
+            <h2>Weekly Water Report</h2>
+
+            <p>
+                Track consumption patterns and identify wastage.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="report-grid">
+
+        <div class="report-card">
+
+            <span>Weekly Consumption</span>
+
+            <h3>
+                48,750 L
+            </h3>
+
+            <p class="green-text">
+                ↓ 12% compared with last week
+            </p>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <span>Average Daily Usage</span>
+
+            <h3>
+                6,964 L
+            </h3>
+
+            <p>
+                Target: 7,500 L
+            </p>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <span>Water Saved</span>
+
+            <h3>
+                8,250 L
+            </h3>
+
+            <p class="green-text">
+                Excellent conservation
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= LEAKAGE ================= -->
+
+<section id="leakage" class="section light">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="small-title">
+                SMART DETECTION
+            </span>
+
+            <h2>Leakage Detection</h2>
+
+            <p>
+                AquaSense identifies abnormal water flow and
+                possible pipeline leakage.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="leakage-container">
+
+        <div class="leak-card critical">
+
+            <div class="status">
+                🔴 Critical
+            </div>
+
+            <h3>
+                Ward 12 Pipeline
+            </h3>
+
+            <p>
+                Abnormal water flow detected.
+            </p>
+
+            <div class="details">
+
+                <span>
+                    💧 Flow: 84 L/min
+                </span>
+
+                <span>
+                    ⚠️ Expected: 35 L/min
+                </span>
+
+            </div>
+
+            <button onclick="showAlert('Leakage reported successfully!')">
+                Report Issue
+            </button>
+
+        </div>
+
+
+        <div class="leak-card warning">
+
+            <div class="status">
+                🟠 Warning
+            </div>
+
+            <h3>
+                Main Road Pipeline
+            </h3>
+
+            <p>
+                Small pressure drop detected.
+            </p>
+
+            <div class="details">
+
+                <span>
+                    💧 Pressure: 2.1 bar
+                </span>
+
+                <span>
+                    📡 Sensor: Online
+                </span>
+
+            </div>
+
+            <button onclick="showAlert('Inspection request submitted!')">
+                Request Inspection
+            </button>
+
+        </div>
+
+
+        <div class="leak-card safe">
+
+            <div class="status">
+                🟢 Safe
+            </div>
+
+            <h3>
+                Ward 8 Pipeline
+            </h3>
+
+            <p>
+                Water flow is within normal limits.
+            </p>
+
+            <div class="details">
+
+                <span>
+                    💧 Flow: 31 L/min
+                </span>
+
+                <span>
+                    ✓ Normal
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= WATER SHORTAGE ================= -->
+
+<section class="section">
+
+    <div class="prediction">
+
+        <div class="prediction-content">
+
+            <span class="small-title">
+                AI PREDICTION
+            </span>
+
+            <h2>
+                Water Shortage Prediction
+            </h2>
+
+            <p>
+                AquaSense analyzes water consumption,
+                groundwater levels, rainfall and reservoir
+                availability to estimate future shortage risk.
+            </p>
+
+
+            <div class="risk">
+
+                <div>
+
+                    <span>
+                        Shortage Risk
+                    </span>
+
+                    <strong>
+                        28%
+                    </strong>
+
+                </div>
+
+                <div class="risk-bar">
+                    <div style="width:28%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="prediction-message">
+
+                🟢 Water availability is expected to remain
+                stable for the next 14 days.
+
+            </div>
+
+        </div>
+
+
+        <div class="prediction-icon">
+            🔮💧
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= MAP ================= -->
+
+<section id="map" class="section light">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="small-title">
+                WATER INTELLIGENCE MAP
+            </span>
+
+            <h2>
+                Water Availability Map
+            </h2>
+
+            <p>
+                Explore water availability and groundwater
+                conditions in different areas.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="map-wrapper">
+
+        <div id="waterMap"></div>
+
+        <div class="map-legend">
+
+            <h4>
+                Water Availability
+            </h4>
+
+            <p>
+                🟢 High
+            </p>
+
+            <p>
+                🟠 Medium
+            </p>
+
+            <p>
+                🔴 Low
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= ISSUES ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="small-title">
+                COMMUNITY WATER ISSUES
+            </span>
+
+            <h2>
+                Issues in Your Area
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="issues-grid">
+
+        <div class="issue-card">
+
+            <div class="issue-icon">
+                🚰
+            </div>
+
+            <h3>
+                Pipeline Leakage
+            </h3>
+
+            <p>
+                Water is being lost through damaged
+                or old pipelines.
+            </p>
+
+            <div class="solution">
+
+                <strong>
+                    💡 Solution
+                </strong>
+
+                <p>
+                    Replace damaged sections and install
+                    smart flow sensors.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="issue-card">
+
+            <div class="issue-icon">
+                🌧️
+            </div>
+
+            <h3>
+                Low Rainwater Collection
+            </h3>
+
+            <p>
+                Large amounts of rainwater are not
+                being stored.
+            </p>
+
+            <div class="solution">
+
+                <strong>
+                    💡 Solution
+                </strong>
+
+                <p>
+                    Implement rooftop rainwater harvesting.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="issue-card">
+
+            <div class="issue-icon">
+                🕳️
+            </div>
+
+            <h3>
+                Groundwater Depletion
+            </h3>
+
+            <p>
+                Groundwater level is decreasing due to
+                excessive extraction.
+            </p>
+
+            <div class="solution">
+
+                <strong>
+                    💡 Solution
+                </strong>
+
+                <p>
+                    Reduce unnecessary pumping and
+                    recharge groundwater.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="issue-card">
+
+            <div class="issue-icon">
+                🚿
+            </div>
+
+            <h3>
+                Excessive Consumption
+            </h3>
+
+            <p>
+                Some areas are consuming more water
+                than the recommended level.
+            </p>
+
+            <div class="solution">
+
+                <strong>
+                    💡 Solution
+                </strong>
+
+                <p>
+                    Use smart meters and water-saving
+                    appliances.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CONSERVATION ================= -->
+
+<section id="solutions" class="section conservation">
+
+    <div class="conservation-header">
+
+        <span class="small-title">
+            SAVE WATER
+        </span>
+
+        <h2>
+            Water Conservation
+        </h2>
+
+        <p>
+            Small changes can save thousands of litres.
+        </p>
+
+    </div>
+
+
+    <div class="tips">
+
+        <div>
+            🚿
+            <h3>
+                Fix Leaks
+            </h3>
+
+            <p>
+                Repair leaking taps and pipes immediately.
+            </p>
+        </div>
+
+
+        <div>
+            🌧️
+            <h3>
+                Harvest Rainwater
+            </h3>
+
+            <p>
+                Collect rainwater for future use.
+            </p>
+        </div>
+
+
+        <div>
+            🌱
+            <h3>
+                Reuse Water
+            </h3>
+
+            <p>
+                Reuse suitable household water for gardening.
+            </p>
+        </div>
+
+
+        <div>
+            📊
+            <h3>
+                Monitor Usage
+            </h3>
+
+            <p>
+                Check your daily consumption regularly.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FUTURE ================= -->
+
+<section class="section future">
+
+    <div class="future-content">
+
+        <span class="small-title">
+            FUTURE READY
+        </span>
+
+        <h2>
+            AquaSense 2.0
+        </h2>
+
+        <p>
+            The platform can be upgraded as new water-management
+            technologies are implemented.
+        </p>
+
+
+        <div class="future-grid">
+
+            <div>
+                🤖
+                <strong>
+                    AI Prediction
+                </strong>
+
+                <p>
+                    Advanced shortage forecasting
+                </p>
+            </div>
+
+
+            <div>
+                📡
+                <strong>
+                    IoT Sensors
+                </strong>
+
+                <p>
+                    Real-time pipeline monitoring
+                </p>
+            </div>
+
+
+            <div>
+                🌦️
+                <strong>
+                    Weather Data
+                </strong>
+
+                <p>
+                    Rainfall-based water prediction
+                </p>
+            </div>
+
+
+            <div>
+                📱
+                <strong>
+                    Mobile App
+                </strong>
+
+                <p>
+                    Citizen alerts and notifications
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div>
+
+        <h2>
+            💧 AquaSense
+        </h2>
+
+        <p>
+            Smart water management for smarter communities.
+        </p>
+
+    </div>
+
+
+    <div>
+
+        <p>
+            © 2026 AquaSense
+        </p>
+
+        <p>
+            Save Water • Save Future
+        </p>
+
+    </div>
+
+</footer>
+
+
+<!-- Scripts -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
